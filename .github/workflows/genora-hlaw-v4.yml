@@ -1,0 +1,24 @@
+name: GENORA H-law canonical integrity
+on:
+  push:
+    branches: [genora-canonical-gate]
+  pull_request:
+    paths:
+      - 'docs/H-law/**'
+      - 'genora_hlaw_v4.py'
+      - 'RUN_HARDENED.sh'
+      - '.github/workflows/genora-hlaw-v4.yml'
+jobs:
+  h-law:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify pinned H001-H087 Merkle root
+        run: python3 genora_hlaw_v4.py --verify
+      - name: Rebuild and verify generated indexes without asserting a global seal
+        run: bash RUN_HARDENED.sh
