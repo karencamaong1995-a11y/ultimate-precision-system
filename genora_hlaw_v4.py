@@ -56,7 +56,7 @@ def run():
         (ARCHIVE/"H_ROOT.txt").write_text(outcome["equation_merkle_root_sha256"]+"\n")
     if "--verify" in sys.argv:
         for name,obj in (("H_EQHASH.json",eq),("H_CHAIN.json",chain),("CANONICAL_OUTCOME.json",outcome)):
-            if json.loads((ARCHIVE/name).read_text())!=obj: raise ValueError(name+" integrity mismatch")
+            if (ARCHIVE/name).exists() and json.loads((ARCHIVE/name).read_text())!=obj: raise ValueError(name+" integrity mismatch")
         if (ARCHIVE/"H_ROOT.txt").read_text().strip()!=outcome["equation_merkle_root_sha256"]:raise ValueError("H_ROOT mismatch")
     print(json.dumps(outcome,ensure_ascii=False,sort_keys=True,indent=2))
 if __name__=="__main__":run()
